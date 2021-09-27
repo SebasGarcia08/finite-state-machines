@@ -28,9 +28,9 @@ A FSM $;$ consists of a set S, R and Q, where:
 
 ## Ouput:
 
-* $b$, the number of lines corresponding to the number of blocks product of the partitioning algorithm.
+* $b$, the number of blocks product of the partitioning algorithm.
 
-* For each line, print the states that correspond to that each block separated by spaces, the order does not matter
+* For each line, print the states that correspond to each block separated by spaces, the order of blocks or states does not matter
 
 ## Examples
 
