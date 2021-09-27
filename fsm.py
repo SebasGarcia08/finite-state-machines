@@ -1,3 +1,5 @@
+from mimetypes import init
+
 import _io
 from typing import List, Dict, Set, Union
 from typing import Tuple
@@ -58,7 +60,8 @@ class FSM:
     def partition(self):
         initial_partition: List[Set[int]] = []
         possible_outs: Dict[Tuple, Set[int]] = dict()
-
+        self._inaccessible_states = self._get_inaccessible_states()
+        print(f"{self._inaccessible_states = }")
         for i in range(len(self._transitions)):
             if i in self._inaccessible_states:
                 continue
@@ -70,6 +73,7 @@ class FSM:
         for block in possible_outs.values():
             initial_partition.append(block)
             print(list(map(lambda idx: self.Q[idx], block)))
+        print(f"{initial_partition = }")
 
     def _partition(self, prev_partition: List[Set[str]]):
         pass
