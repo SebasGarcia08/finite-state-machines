@@ -30,10 +30,10 @@ def solve(input_file: str):
                     transitions.append((row[i], row[i+1]))
                     i += len_s
                 fsm.add_transitions(state, transitions)
-        #print(fsm)
-        #print(fsm.inaccessible_states)
-        #print(fsm._transitions)
-        fsm.partition()
+        partitioned_states = fsm.partition()
+        print(len(partitioned_states))
+        for i, block in enumerate(partitioned_states):
+            print(*block)
 
 
 if __name__ == '__main__':

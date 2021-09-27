@@ -56,6 +56,7 @@ F E 0 C 0
 
 #### Output
 ```
+4
 A C
 D F
 E 
@@ -88,6 +89,7 @@ J E 0 I 0
 
 #### Output
 ```
+4
 A E I
 B F
 C G
