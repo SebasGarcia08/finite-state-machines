@@ -49,7 +49,7 @@ class FSM:
             dest_state, output = t
             self.add_transition(src=state, dest=dest_state, stimulus=stimulus, output=output)
 
-    def partition(self) -> List[List[str]]:
+    def partition(self, verbose: bool = False) -> List[List[str]]:
         initial_partition: List[List[str]] = []
         possible_outs: Dict[Tuple, Set[str]] = dict()
         self._inaccessible_states = self._get_inaccessible_states()
@@ -63,7 +63,9 @@ class FSM:
                 possible_outs[outs].add(i)
         for block in possible_outs.values():
             initial_partition.append(list(block))
-        return self._partition(initial_partition)
+        if verbose:
+            print(initial_partition)
+        return self._partition(initial_partition, verbose)
 
     def _get_successors(self, partition: List[List[str]]) -> List[List[Tuple]]:
         block_s_successors: List[List[Tuple]] = []
@@ -76,7 +78,7 @@ class FSM:
             block_s_successors.append(block_successors)
         return block_s_successors
 
-    def _partition(self, prev_partition: List[List[str]]):
+    def _partition(self, prev_partition: List[List[str]], verbose: bool = False):
         block_s_successors = self._get_successors(prev_partition)
 
         new_partition_buckets: Dict[Tuple[int, Tuple[int, ...]], List[str]] = dict()
@@ -94,6 +96,8 @@ class FSM:
                     new_partition_buckets[prev_block_belongs].append(state_belongs)
 
         new_partition: List[List[str]] = list(new_partition_buckets.values())
+        if verbose:
+            print(new_partition)
         if new_partition == prev_partition:
             return new_partition
         else:

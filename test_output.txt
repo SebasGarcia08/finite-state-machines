@@ -1,10 +1,23 @@
 4
-A C
-D F
+C A
 E
+F D
 B
 4
-A E I
-B F
-C G
-D H
+A
+B
+C
+D
+4
+I E
+F
+G
+H
+3
+D
+E
+F
+3
+A
+B
+C

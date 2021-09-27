@@ -15,7 +15,7 @@ def solve(input_file: str):
         R = read_line(reader).split()
         len_q = int(read_line(reader))
         Q = read_line(reader).split()
-        init_state = read_line(reader)
+        init_state = Q[0]
 
         S, Q, R = map(tuple, [S, Q, R])
         fsm = FSM(S, R, Q, init_state)
@@ -30,7 +30,7 @@ def solve(input_file: str):
                     transitions.append((row[i], row[i+1]))
                     i += len_s
                 fsm.add_transitions(state, transitions)
-        partitioned_states = fsm.partition()
+        partitioned_states = fsm.partition(verbose=False)
         print(len(partitioned_states))
         for i, block in enumerate(partitioned_states):
             print(*block)

@@ -19,10 +19,8 @@ A FSM $;$ consists of a set S, R and Q, where:
 * $R$: Output alphabet separated by spaces
 
 * $|Q|$: Cardinality of set of states
-
-* $Q$: set of states separated by spaces
-
-* $Q_0$: Initial state
+  
+* $Q$: set of states separated by spaces, where the first one is the initial state.
 
 * Matrix of shape $|Q| \times (2|S| + 1) $ where each row is separated by spaces 
 
@@ -34,7 +32,7 @@ A FSM $;$ consists of a set S, R and Q, where:
 
 ## Examples
 
-### Case 1
+### Test case 1
 
 #### Input
 
@@ -57,13 +55,13 @@ F E 0 C 0
 #### Output
 ```
 4
-A C
-D F
-E 
+F D
+C A
+E
 B
 ```
 
-### Case 2
+### Test case 2
 
 #### Input
 
@@ -72,26 +70,44 @@ B
 a b
 4
 0 1 2 3
-10
-A B C D E F G H I J
-E
+4
+A B C D
 A B 1 C 2
 B C 2 D 3
-C D 3 A 0 
+C D 3 A 0
 D A 0 B 1
-E F 1 G 2 
+```
+
+#### Output
+```
+4
+A
+B
+C
+D
+```
+### Test case 3
+
+#### Input
+```
+2
+a b
+4
+0 1 2 3
+6
+E F G H I J
+E F 1 G 2
 F G 2 H 3
 G H 3 I 0
 H I 0 F 1
 I F 1 G 2
 J E 0 I 0
 ```
-
 #### Output
 ```
 4
-A E I
-B F
-C G
-D H
+E I
+F
+G
+H
 ```
