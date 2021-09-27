@@ -22,11 +22,13 @@ A FSM $;$ consists of a set S, R and Q, where:
   
 * $Q$: set of states separated by spaces, where the first one is the initial state.
 
-* Matrix of shape $|Q| \times (2|S| + 1) $ where each row is separated by spaces 
+* Transition table of shape $|Q| \times (1 + 2|S|) $, where the first column correspond to the states, and 
+  its rows are composed of $| S |$ 2-tuples ($q'$, $r'$), which represent its transitions to the next state $q'$ 
+  and output $r'$ given the & s_i & stimulus.
 
 ## Ouput:
 
-* $b$, the number of lines corresponding to the number of blocks.
+* $b$, the number of lines corresponding to the number of blocks product of the partitioning algorithm.
 
 * For each line, print the states that correspond to that each block separated by spaces, the order does not matter
 
@@ -43,7 +45,6 @@ A FSM $;$ consists of a set S, R and Q, where:
 0 1
 6
 A B C D E F
-A
 A B 0 D 0
 B C 1 E 1
 C B 0 F 0
