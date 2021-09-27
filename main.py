@@ -33,7 +33,7 @@ def solve(input_file: str):
         print(fsm)
         print(fsm.inaccessible_states)
         print(fsm._transitions)
-        print(fsm.partition())
+        fsm.partition()
 
 
 if __name__ == '__main__':

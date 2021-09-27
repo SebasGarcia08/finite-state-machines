@@ -18,7 +18,7 @@ class FSM:
     Q: Tuple
     init_state: str
     _transitions: List[List[Tuple[int, int]]] = field(default_factory=list)
-    _inaccessible_states: List[str] = None
+    _inaccessible_states: List[int] = None
 
     def __post_init__(self) -> None:
         for _ in range(len(self.Q)):
@@ -28,7 +28,8 @@ class FSM:
     def inaccessible_states(self) -> List[str]:
         if self._inaccessible_states is None:
             self._inaccessible_states = self._get_inaccessible_states()
-        return self._inaccessible_states
+        inaccessible_states = list(map(lambda idx: self.Q[idx], self._inaccessible_states))
+        return inaccessible_states
 
     def add_transition(self, src: str, dest: str, stimulus: str, output: str) -> None:
         """
@@ -59,23 +60,26 @@ class FSM:
         possible_outs: Dict[Tuple, Set[int]] = dict()
 
         for i in range(len(self._transitions)):
+            if i in self._inaccessible_states:
+                continue
             outs = tuple(map(lambda x: x[1], self._transitions[i]))
             if outs not in possible_outs:
                 possible_outs[outs] = {i}
             else:
                 possible_outs[outs].add(i)
-        print(possible_outs)
+        for block in possible_outs.values():
+            initial_partition.append(block)
+            print(list(map(lambda idx: self.Q[idx], block)))
 
     def _partition(self, prev_partition: List[Set[str]]):
         pass
 
-    def _get_inaccessible_states(self) -> List[str]:
+    def _get_inaccessible_states(self) -> List[int]:
         start_idx = self.Q.index(self.init_state)
         accessible_states_idxs: Set[int] = set()
         self._get_accessible_states_from(start_idx, accessible_states_idxs)
-        inaccessible_states_idxs = set(range(len(self.Q))) - accessible_states_idxs
-        inaccessible_states = list(map(lambda idx: self.Q[idx], inaccessible_states_idxs))
-        return inaccessible_states
+        inaccessible_states_idxs = list(set(range(len(self.Q))) - accessible_states_idxs)
+        return inaccessible_states_idxs
 
     def _get_accessible_states_from(self, src_idx: int, visited: Set[int]) -> None:
         to_visit = set(map(lambda x: x[0], self._transitions[src_idx]))
