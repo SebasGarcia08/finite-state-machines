@@ -1,14 +1,26 @@
 <template lang="html">
   <div>
-    <p>{{ message }} </p>
+    <h1>Automata converter</h1>
+    <StatementInput />
+    <TableEditablePage />
+    <StatementOutput />
+    <br>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
+import StatementInput from './StatementInput'
+import StatementOutput from './StatementOutput'
+import TableEditablePage from './TableEditablePage'
 
 export default {
-  name: 'Main',
+  name: 'Home',
+  components: {
+    StatementInput,
+    StatementOutput,
+    TableEditablePage
+  },
   methods: {
     getMessage () {
       const path = 'http://localhost:5000/api/v1.0/message'
@@ -18,11 +30,10 @@ export default {
     }
   },
   created () {
-    this.getMessage()
   },
   data () {
     return {
-      message: 'New message from Vue'
+      message: 'New message from Vue',
     }
   }
 }

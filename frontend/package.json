@@ -12,7 +12,12 @@
   },
   "dependencies": {
     "axios": "^0.22.0",
+    "install": "^0.13.0",
+    "mdbootstrap": "^4.20.0",
+    "mdbvue": "^6.7.3",
+    "npm": "^7.24.1",
     "vue": "^2.5.2",
+    "vue-mathjax": "0.0.11",
     "vue-router": "^3.0.1"
   },
   "devDependencies": {
