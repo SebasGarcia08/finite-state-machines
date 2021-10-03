@@ -36,9 +36,16 @@ class FSM:
             'stimulus': (stimulus, self.S),
             'output': (output, self.R)
         }
+        msg = ""
+        valid_inputs: List[bool] = []
         for name, (received, possible_values) in results.items():
-            if received not in possible_values:
-                raise KeyError(f'{name} {received} not found in any of {possible_values}')
+            valid = received in possible_values
+            if not valid:
+                msg += f'{name} {received} not found in any of {possible_values}'
+            valid_inputs.append(valid)
+
+        if not all(valid_inputs):
+            raise KeyError(msg)
 
     def add_transition(self, src: str, dest: str, stimulus: str, output: str) -> None:
         """
