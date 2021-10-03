@@ -37,4 +37,4 @@ def solve(input_file: str):
 
 
 if __name__ == '__main__':
-    solve("test_input.txt")
+    solve("../test_input.txt")

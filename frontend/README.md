@@ -1,6 +1,6 @@
 # frontend
 
-> A Vue.js project
+> Finite State Machines webapp
 
 ## Build Setup
 
