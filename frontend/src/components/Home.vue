@@ -2,7 +2,7 @@
   <div>
     <h1>Automata converter</h1>
     <StatementInput />
-    <TableEditablePage />
+    <textarea></textarea>
     <StatementOutput />
     <br>
   </div>

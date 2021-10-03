@@ -1,49 +1,49 @@
 <template>
   <div>
     <ul>
-      <li>S is a finite input alphabet,</li>
+      <li><b>S</b> is a finite input alphabet,</li>
       <br/>
-      <li>R is a finite output alphabet and</li>
+      <li><b>R</b> is a finite output alphabet and</li>
       <br/>
-      <li>Q is a set of states.</li>
+      <li><b>Q</b> is a set of states.</li>
       <br/>
     </ul>
     <h2>Input</h2>
     <ul>
       <li>
-        n: the number of tests cases
+        <b>N</b>: the number of tests cases
+      </li>
+      <br>
+      <li>
+        <b>M</b>: The type of machine. (S or T)
+        S for State-assigned (Moore), T for transition-assigned (Mealy)
+        <br>
+      </li>
+      <br>
+      <li>
+        <b>S</b>: input alphabet separated by spaces
       </li>
       <br/>
       <li>
-        |S|: Length of input alphabet
+        <b>R</b>: Output alphabet separated by spaces
+      </li>
+      <br>
+      <li>
+        <b>Q</b>: set of states separated by spaces
       </li>
       <br/>
       <li>
-        S: input alphabet separated by spaces
+        <b>Q0</b>: Initial state
       </li>
       <br/>
       <li>
-        |R|: Length of output alphabet
-      </li>
-      <br/>
-      <li>
-        R: Output alphabet separated by spaces
-      </li>
-      <br/>
-      <li>
-        |Q|: Cardinality of set of states
-      </li>
-      <br/>
-      <li>
-        Q: set of states separated by spaces
-      </li>
-      <br/>
-      <li>
-        Q_0: Initial state
-      </li>
-      <br/>
-      <li>
-        Transition table of shape |Q| by 2|S| + 1 where each row is separated by spaces
+        <b>Transition table of shape:</b>
+        <br>
+        |Q| by 2|S| + 1 for Mealy Machines and
+        <br>
+        |Q| by |S| + 1 for Moore Machines
+        <br>
+        where each row is separated by spaces
       </li>
       <br/>
     </ul>
