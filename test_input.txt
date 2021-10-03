@@ -27,7 +27,7 @@ G H 3 I 0
 H I 0 F 1
 I F 1 G 2
 J E 0 I 0
-S
+T
 0 1
 0 1
 D E F G H
@@ -36,7 +36,7 @@ E D 0 F 1
 F F 1 D 0
 G E 0 H 1
 H D 1 G 0
-S
+T
 0 1
 0 1
 A B C
