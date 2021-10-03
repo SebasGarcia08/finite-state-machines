@@ -29,10 +29,22 @@ class FSM:
             self._inaccessible_states = self._get_inaccessible_states()
         return self._inaccessible_states
 
+    def _check_valid_transition(self, src: str, dest: str, stimulus: str, output: str):
+        results = {
+            'source state': (src, self.Q),
+            'destiny state': (dest, self.Q),
+            'stimulus': (stimulus, self.S),
+            'output': (output, self.R)
+        }
+        for name, (received, possible_values) in results.items():
+            if received not in possible_values:
+                raise KeyError(f'{name} {received} not found in any of {possible_values}')
+
     def add_transition(self, src: str, dest: str, stimulus: str, output: str) -> None:
         """
         Adds the connection of a state
         """
+        self._check_valid_transition(src, dest, stimulus, output)
         self._transitions[src][stimulus] = (dest, output)
 
     def add_transitions(
