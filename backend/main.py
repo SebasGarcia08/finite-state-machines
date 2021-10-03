@@ -9,26 +9,24 @@ def solve(input_file: str):
     reader = open(input_file, "r")
     num_tests = int(read_line(reader))
     for t in range(num_tests):
-        len_s = int(read_line(reader))
+        machine_type = int(read_line(reader))
         S = read_line(reader).split()
-        len_r = int(read_line(reader))
         R = read_line(reader).split()
-        len_q = int(read_line(reader))
         Q = read_line(reader).split()
         init_state = Q[0]
 
         S, Q, R = map(tuple, [S, Q, R])
         fsm = FSM(S, R, Q, init_state)
 
-        for _ in range(len_q):
+        for _ in range(len(Q)):
             row = read_line(reader).split()
             state = row[0]
             i = 1
-            while i < 2*len_s + 1:
+            while i < 2*len(S) + 1:
                 transitions = []
-                for _ in range(len_s):
+                for _ in range(len(S)):
                     transitions.append((row[i], row[i+1]))
-                    i += len_s
+                    i += len(S)
                 fsm.add_transitions(state, transitions)
         partitioned_states = fsm.partition(verbose=False)
         print(len(partitioned_states))

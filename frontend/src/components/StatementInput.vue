@@ -25,7 +25,8 @@
         <br>
         |Q| by |S| + 1 for Moore Machines
         <br>
-        where each row is separated by spaces
+        where the ith-row of the first column refers to the state and the columns correspond to
+        to its transitions.
       </li>
     </ul>
   </div>
