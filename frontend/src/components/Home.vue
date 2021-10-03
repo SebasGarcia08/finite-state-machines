@@ -1,10 +1,30 @@
 <template lang="html">
   <div>
-    <h1>Automata converter</h1>
-    <StatementInput />
-    <textarea></textarea>
-    <StatementOutput />
+    <Navbar />
     <br>
+    <div class="container">
+      <b-card title="Definition" bg-variant="light">
+        <b-card-text>
+          <StatementIntro/>
+        </b-card-text>
+      </b-card>
+      <br>
+      <b-card title="Input format" bg-variant="light">
+        <StatementInput/>
+      </b-card>
+      <br>
+      <b-form-textarea
+        id="textarea"
+        placeholder="Enter something..."
+        rows="10"
+        max-rows="6"
+      ></b-form-textarea>
+      <br>
+      <b-card title="Output format" bg-variant="light">
+        <StatementOutput/>
+      </b-card>
+      <br>
+    </div>
   </div>
 </template>
 
@@ -12,14 +32,16 @@
 import axios from 'axios'
 import StatementInput from './StatementInput'
 import StatementOutput from './StatementOutput'
-import TableEditablePage from './TableEditablePage'
+import StatementIntro from './StatementIntro'
+import Navbar from './Navbar'
 
 export default {
   name: 'Home',
   components: {
     StatementInput,
     StatementOutput,
-    TableEditablePage
+    Navbar,
+    StatementIntro
   },
   methods: {
     getMessage () {
@@ -33,7 +55,7 @@ export default {
   },
   data () {
     return {
-      message: 'New message from Vue',
+      message: 'New message from Vue'
     }
   }
 }

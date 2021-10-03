@@ -12,6 +12,8 @@
   },
   "dependencies": {
     "axios": "^0.22.0",
+    "bootstrap": "^5.1.1",
+    "bootstrap-vue": "^2.21.2",
     "install": "^0.13.0",
     "mdbootstrap": "^4.20.0",
     "mdbvue": "^6.7.3",
