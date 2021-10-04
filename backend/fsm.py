@@ -3,6 +3,10 @@ from typing import Tuple
 from dataclasses import dataclass, field
 
 
+class Partition(list):
+    pass
+
+
 @dataclass
 class FSM:
     S: Tuple[str, ...]
@@ -68,7 +72,7 @@ class FSM:
             dest_state, output = t
             self.add_transition(src=state, dest=dest_state, stimulus=stimulus, output=output)
 
-    def partition(self, verbose: bool = False) -> List[List[str]]:
+    def partition(self, verbose: bool = False) -> List[List[List[str]]]:
         initial_partition: List[List[str]] = []
         possible_outs: Dict[Tuple, Set[str]] = dict()
         self._inaccessible_states = self._get_inaccessible_states()
@@ -84,7 +88,8 @@ class FSM:
             initial_partition.append(list(block))
         if verbose:
             print(initial_partition)
-        return self._partition(initial_partition, verbose)
+        partitions = [list(self.Q), initial_partition]
+        return self._partition(partitions=partitions, verbose=verbose)
 
     def _get_successors(self, partition: List[List[str]]) -> List[List[Tuple]]:
         block_s_successors: List[List[Tuple]] = []
@@ -97,7 +102,8 @@ class FSM:
             block_s_successors.append(block_successors)
         return block_s_successors
 
-    def _partition(self, prev_partition: List[List[str]], verbose: bool = False):
+    def _partition(self, partitions: List[List[List[str]]], verbose: bool = False) -> List[List[List[str]]]:
+        prev_partition = partitions[-1]
         block_s_successors = self._get_successors(prev_partition)
 
         new_partition_buckets: Dict[Tuple[int, Tuple[int, ...]], List[str]] = dict()
@@ -118,9 +124,10 @@ class FSM:
         if verbose:
             print(new_partition)
         if new_partition == prev_partition:
-            return new_partition
+            return partitions
         else:
-            return self._partition(prev_partition=new_partition)
+            partitions.append(new_partition)
+            return self._partition(partitions)
 
     @staticmethod
     def _which_block(successor: int, partition: List[List[str]]) -> int:

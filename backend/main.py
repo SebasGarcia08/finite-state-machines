@@ -70,7 +70,8 @@ def solve(lines: List[str]):
         print(f"{test_case_input = }")
         inaccessible_states, partitioned_states, next_test_case_index = solve_test_case(test_case_input)
         print(f"{inaccessible_states = }")
-        print(f"{partitioned_states = }")
+        for i, p in enumerate(partitioned_states):
+            print(f"p{i}: {p}")
         print(f"{next_test_case_index = }")
         test_cases_index += next_test_case_index
         print()
