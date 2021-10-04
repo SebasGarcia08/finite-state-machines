@@ -86,7 +86,7 @@ export default {
         'H I 0 F 1\n' +
         'I F 1 G 2\n' +
         'J E 0 I 0\n' +
-        'S\n' +
+        'T\n' +
         '0 1\n' +
         '0 1\n' +
         'D E F G H\n' +
@@ -95,7 +95,7 @@ export default {
         'F F 1 D 0\n' +
         'G E 0 H 1\n' +
         'H D 1 G 0\n' +
-        'S\n' +
+        'T\n' +
         '0 1\n' +
         '0 1\n' +
         'A B C\n' +

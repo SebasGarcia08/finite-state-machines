@@ -4,7 +4,6 @@ from typing import List, Callable, Dict, Tuple
 
 def parse_transition_table(fsm: FSM, transition_table: List[str], machine_type: str) -> None:
     S = fsm.S
-    print(f"{transition_table = }")
     conditions: Dict[str, Callable[[int], bool]] = {
         'T': lambda idx: idx < 2 * len(S) + 1,
         'S': lambda idx: idx < len(S) + 1
@@ -32,10 +31,8 @@ def parse_transition_table(fsm: FSM, transition_table: List[str], machine_type: 
             transitions = []
             for _ in range(len(S)):
                 transition = get_transition(row_split, i)
-                print(i, transition)
                 transitions.append(transition)
                 i = step(i)
-                print(f"{i = }")
             fsm.add_transitions(state, transitions)
 
 
@@ -56,7 +53,6 @@ def solve_test_case(input_test_case: List[str]) -> Tuple[List[str], List[List[st
 
     S, Q, R = map(tuple, [S, Q, R])
     fsm = FSM(S=S, R=R, Q=Q, init_state=init_state)
-    print(f"{input_test_case = }")
     end_test_case = 4 + len(Q)
     transition_table = input_test_case[4: end_test_case]
     parse_transition_table(fsm, transition_table, machine_type)
@@ -73,9 +69,9 @@ def solve(lines: List[str]):
         test_case_input = lines[test_cases_index:]
         print(f"{test_case_input = }")
         inaccessible_states, partitioned_states, next_test_case_index = solve_test_case(test_case_input)
-        print(inaccessible_states)
-        print(partitioned_states)
-        print(next_test_case_index)
+        print(f"{inaccessible_states = }")
+        print(f"{partitioned_states = }")
+        print(f"{next_test_case_index = }")
         test_cases_index += next_test_case_index
         print()
 
