@@ -37,7 +37,7 @@ def parse_transition_table(fsm: FSM, transition_table: List[str], machine_type: 
             fsm.add_transitions(state, transitions)
 
 
-def solve_test_case(input_test_case: List[str]) -> Tuple[List[str], List[List[List[str]]], int]:
+def solve_test_case(input_test_case: List[str]) -> Tuple[FSM, int]:
     """Parses a single test case
     Args:
         input_test_case(List[str]): List of strings containing remaining cases
@@ -57,30 +57,24 @@ def solve_test_case(input_test_case: List[str]) -> Tuple[List[str], List[List[Li
     end_test_case = 4 + len(Q)
     transition_table = input_test_case[4: end_test_case]
     parse_transition_table(fsm, transition_table, machine_type)
-    connected_fsm = fsm.connected()
-    partitioned_states = fsm._partition(verbose=False)
-    inaccessible_states = fsm.inaccessible_states
     next_test_case_index = end_test_case
-    minimum_equivalent_sm = fsm.minimum_equivalent()
-    print('Minimum equivalent')
-    print(minimum_equivalent_sm)
-    print('*'* 100)
-    return inaccessible_states, partitioned_states, next_test_case_index
+    return fsm, next_test_case_index
 
 
-def solve(lines: List[str]):
+def solve(lines: List[str]) -> List[Tuple[FSM, FSM]]:
+    solutions = []
     num_tests = int(lines[0])
     test_cases_index = 1
     for t in range(num_tests):
         test_case_input = lines[test_cases_index:]
-        print(f"{test_case_input = }")
-        inaccessible_states, partitioned_states, next_test_case_index = solve_test_case(test_case_input)
-        print(f"{inaccessible_states = }")
-        for i, p in enumerate(partitioned_states):
-            print(f"p{i}: {p}")
-        print(f"{next_test_case_index = }")
+        fsm, next_test_case_index = solve_test_case(test_case_input)
+        print(f"FSM: \n{fsm = }")
+        print()
+        print(f"Minimum equivalent: \n{fsm.minimum_equivalent()}")
+        solutions.append((fsm, fsm.minimum_equivalent()))
         test_cases_index += next_test_case_index
         print()
+    return solutions
 
 
 if __name__ == '__main__':

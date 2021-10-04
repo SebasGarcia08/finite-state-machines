@@ -32,7 +32,9 @@
       </b-button>
       <b-card title="Solution" bg-variant="light">
         <b-form-textarea
-          v-model="solution"
+          plaintext
+          :value="solution"
+          max-rows="1000"
           id="solution-textarea"
         ></b-form-textarea>
       </b-card>
@@ -47,6 +49,7 @@ import StatementInput from './StatementInput'
 import StatementOutput from './StatementOutput'
 import StatementIntro from './StatementIntro'
 import Navbar from './Navbar'
+import TransitionTable from './TransitionTable'
 
 export default {
   name: 'Home',
@@ -54,7 +57,8 @@ export default {
     StatementInput,
     StatementOutput,
     Navbar,
-    StatementIntro
+    StatementIntro,
+    TransitionTable
   },
   methods: {
     getMessage () {

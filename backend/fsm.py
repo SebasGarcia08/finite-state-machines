@@ -2,6 +2,7 @@ from typing import List, Dict, Set, Union
 from typing import Tuple
 from dataclasses import dataclass, field
 from pprint import pprint
+from copy import deepcopy
 
 
 @dataclass
@@ -103,7 +104,7 @@ class FSM:
             equivalent_Q.append(equivalent_state)
 
         equivalent_Q = tuple(equivalent_Q)
-        equivalent_transitions: Dict[str, Dict[str, Tuple[str, str]]] = self._transitions.copy()
+        equivalent_transitions: Dict[str, Dict[str, Tuple[str, str]]] = deepcopy(self._transitions)
         old_transitions_keys = list(equivalent_transitions.keys())
         for old_state in old_transitions_keys:
             if old_state in inaccessible_states:
@@ -223,4 +224,8 @@ class FSM:
                 for dest_state, output in t.items():
                     string += f"{output[0]}, {output[1]}\t"
                 string += "\n"
+        string += f'Inaccessible states: {self.inaccessible_states}\n'
+        string += "Partitions: \n"
+        for i, p in enumerate(self.partitions):
+            string += f"p{i}: {p}\n"
         return string
