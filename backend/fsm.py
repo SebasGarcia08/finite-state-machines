@@ -84,7 +84,7 @@ class FSM:
     def connected(self) -> 'FSM':
         inaccessible_states = self._get_inaccessible_states()
         accessible_states = list(self.Q)
-        connected_transitions = self._transitions.copy()
+        connected_transitions = deepcopy(self._transitions)
         for x in inaccessible_states:
             accessible_states.remove(x)
             del (connected_transitions[x])
