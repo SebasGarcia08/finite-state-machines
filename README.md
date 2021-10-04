@@ -1,3 +1,50 @@
+# Software requirements
+
+## Backend
+
+* Python 3.8 or later
+
+* PIP package manager
+
+## Frontend
+
+* NodeJS
+  
+* NPM Package manager
+
+# Get started
+
+## Frontend
+
+``` bash
+cd frontend
+
+# install dependencies
+npm install
+
+# serve with hot reloading for development at localhost:8080
+npm run dev
+
+# build for production with minification
+npm run build
+
+# build for production and view the bundle analyzer report
+npm run build --report
+```
+
+## Backend 
+
+``` bash
+cd backend
+
+# install dependencies
+pip install -r requirements.txt
+
+# Start server at localhost:5000
+python server.py
+```
+Notice that the application is located at localhost:5000
+
 # FSM (Finite State Machine)
 
 A FSM $;$ consists of a set S, R and Q, where: 
