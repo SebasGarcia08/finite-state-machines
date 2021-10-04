@@ -24,6 +24,18 @@
       <b-card title="Output format" bg-variant="light">
         <StatementOutput/>
       </b-card>
+      <b-button
+        @click="solve()"
+        class="justify-content-center"
+        block variant="success"
+      >Solve!
+      </b-button>
+      <b-card title="Solution" bg-variant="light">
+        <b-form-textarea
+          v-model="solution"
+          id="solution-textarea"
+        ></b-form-textarea>
+      </b-card>
       <br>
     </div>
   </div>
@@ -50,6 +62,11 @@ export default {
       axios.get(path).then((res) => {
         this.message = res.data
       }).catch((err) => console.log(err))
+    },
+    solve () {
+      axios.post('http://localhost:5000/api/v1.0/solve', {input: this.input})
+        .then(res => this.solution = res.data)
+        .catch(err => console.log(err))
     }
   },
   created () {
@@ -57,6 +74,7 @@ export default {
   data () {
     return {
       message: 'New message from Vue',
+      solution: '',
       input: '5\n' +
         'S\n' +
         '0 1\n' +
