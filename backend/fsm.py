@@ -1,10 +1,7 @@
 from typing import List, Dict, Set, Union
 from typing import Tuple
 from dataclasses import dataclass, field
-
-
-class Partition(list):
-    pass
+from pprint import pprint
 
 
 @dataclass
@@ -15,6 +12,7 @@ class FSM:
     init_state: str
     _transitions: Dict[str, Dict[str, Tuple[str, str]]] = field(default_factory=dict)
     _inaccessible_states: List[str] = None
+    _partitions: List[List[List[str]]] = None
     """Finite State Machine
     Args:
       S (Tuple[str]): the input alphabet
@@ -32,6 +30,16 @@ class FSM:
         if self._inaccessible_states is None:
             self._inaccessible_states = self._get_inaccessible_states()
         return self._inaccessible_states
+
+    @property
+    def partitions(self) -> List[List[List[str]]]:
+        if self._partitions is None:
+            self._partitions = self._partition()
+        return self._partitions
+
+    @property
+    def blocks(self) -> List[List[str]]:
+        return self.partitions[-1]
 
     def _check_valid_transition(self, src: str, dest: str, stimulus: str, output: str):
         results = {
@@ -72,7 +80,57 @@ class FSM:
             dest_state, output = t
             self.add_transition(src=state, dest=dest_state, stimulus=stimulus, output=output)
 
-    def partition(self, verbose: bool = False) -> List[List[List[str]]]:
+    def connected(self) -> 'FSM':
+        inaccessible_states = self._get_inaccessible_states()
+        accessible_states = list(self.Q)
+        connected_transitions = self._transitions.copy()
+        for x in inaccessible_states:
+            accessible_states.remove(x)
+            del (connected_transitions[x])
+        connected_fsm = FSM(Q=tuple(accessible_states), S=self.S, R=self.R, init_state=self.init_state)
+        connected_fsm._transitions = connected_transitions
+        return connected_fsm
+
+    def minimum_equivalent(self) -> 'FSM':
+        blocks = self.blocks
+        inaccessible_states = self.inaccessible_states
+        state_2_equivalent: Dict[str, str] = dict()
+        equivalent_Q = []
+        for i, block in enumerate(blocks):
+            equivalent_state = f'q{i+1}'
+            for state_2_replace in block:
+                state_2_equivalent[state_2_replace] = equivalent_state
+            equivalent_Q.append(equivalent_state)
+
+        equivalent_Q = tuple(equivalent_Q)
+        equivalent_transitions: Dict[str, Dict[str, Tuple[str, str]]] = self._transitions.copy()
+        old_transitions_keys = list(equivalent_transitions.keys())
+        for old_state in old_transitions_keys:
+            if old_state in inaccessible_states:
+                continue
+            transitions_2_map = equivalent_transitions[old_state]
+            for stimulus in transitions_2_map.keys():
+                old_transition = transitions_2_map[stimulus]
+                dest_state, output = old_transition
+                transitions_2_map[stimulus] = (state_2_equivalent[dest_state], output)
+            renamed_state = state_2_equivalent[old_state]
+            equivalent_transitions[renamed_state] = transitions_2_map
+        pprint(state_2_equivalent)
+        keys = list(equivalent_transitions.keys())
+        for k in keys:
+            if not k.startswith('q'):
+                del equivalent_transitions[k]
+        equivalent_initial_state = state_2_equivalent[self.init_state]
+        minimum_equivalent_fsm = FSM(
+            Q=equivalent_Q,
+            R=self.R,
+            S=self.S,
+            init_state=equivalent_initial_state
+        )
+        minimum_equivalent_fsm._transitions = equivalent_transitions
+        return minimum_equivalent_fsm
+
+    def _partition(self, verbose: bool = False) -> List[List[List[str]]]:
         initial_partition: List[List[str]] = []
         possible_outs: Dict[Tuple, Set[str]] = dict()
         self._inaccessible_states = self._get_inaccessible_states()
@@ -89,7 +147,7 @@ class FSM:
         if verbose:
             print(initial_partition)
         partitions = [list(self.Q), initial_partition]
-        return self._partition(partitions=partitions, verbose=verbose)
+        return self._recursive_partition(partitions=partitions, verbose=verbose)
 
     def _get_successors(self, partition: List[List[str]]) -> List[List[Tuple]]:
         block_s_successors: List[List[Tuple]] = []
@@ -102,7 +160,7 @@ class FSM:
             block_s_successors.append(block_successors)
         return block_s_successors
 
-    def _partition(self, partitions: List[List[List[str]]], verbose: bool = False) -> List[List[List[str]]]:
+    def _recursive_partition(self, partitions: List[List[List[str]]], verbose: bool = False) -> List[List[List[str]]]:
         prev_partition = partitions[-1]
         block_s_successors = self._get_successors(prev_partition)
 
@@ -127,7 +185,7 @@ class FSM:
             return partitions
         else:
             partitions.append(new_partition)
-            return self._partition(partitions)
+            return self._recursive_partition(partitions)
 
     @staticmethod
     def _which_block(successor: int, partition: List[List[str]]) -> int:

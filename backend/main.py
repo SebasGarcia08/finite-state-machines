@@ -1,5 +1,6 @@
 from fsm import FSM
 from typing import List, Callable, Dict, Tuple
+from pprint import pprint
 
 
 def parse_transition_table(fsm: FSM, transition_table: List[str], machine_type: str) -> None:
@@ -36,7 +37,7 @@ def parse_transition_table(fsm: FSM, transition_table: List[str], machine_type: 
             fsm.add_transitions(state, transitions)
 
 
-def solve_test_case(input_test_case: List[str]) -> Tuple[List[str], List[List[str]], int]:
+def solve_test_case(input_test_case: List[str]) -> Tuple[List[str], List[List[List[str]]], int]:
     """Parses a single test case
     Args:
         input_test_case(List[str]): List of strings containing remaining cases
@@ -56,9 +57,14 @@ def solve_test_case(input_test_case: List[str]) -> Tuple[List[str], List[List[st
     end_test_case = 4 + len(Q)
     transition_table = input_test_case[4: end_test_case]
     parse_transition_table(fsm, transition_table, machine_type)
-    partitioned_states = fsm.partition(verbose=False)
+    connected_fsm = fsm.connected()
+    partitioned_states = fsm._partition(verbose=False)
     inaccessible_states = fsm.inaccessible_states
     next_test_case_index = end_test_case
+    minimum_equivalent_sm = fsm.minimum_equivalent()
+    print('Minimum equivalent')
+    print(minimum_equivalent_sm)
+    print('*'* 100)
     return inaccessible_states, partitioned_states, next_test_case_index
 
 
