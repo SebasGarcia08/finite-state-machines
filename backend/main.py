@@ -3,21 +3,23 @@ from typing import List, Callable, Dict, Tuple
 from pprint import pprint
 
 
-def parse_transition_table(fsm: FSM, transition_table: List[str], machine_type: str) -> None:
+def parse_transition_table(
+    fsm: FSM, transition_table: List[str], machine_type: str
+) -> None:
     S = fsm.S
     conditions: Dict[str, Callable[[int], bool]] = {
-        'T': lambda idx: idx < 2 * len(S) + 1,
-        'S': lambda idx: idx < len(S) + 1
+        "T": lambda idx: idx < 2 * len(S) + 1,
+        "S": lambda idx: idx < len(S) + 1,
     }
 
     get_transitions: Dict[str, Callable[[List[str], int], Tuple[str, str]]] = {
-        'T': lambda tt_row, idx: (tt_row[idx], tt_row[idx + 1]),
-        'S': lambda tt_row, idx: (tt_row[idx], tt_row[-1])
+        "T": lambda tt_row, idx: (tt_row[idx], tt_row[idx + 1]),
+        "S": lambda tt_row, idx: (tt_row[idx], tt_row[-1]),
     }
 
     step_rule: Dict[str, Callable[[int], int]] = {
-        'T': lambda idx: idx + len(S),
-        'S': lambda idx: idx + 1
+        "T": lambda idx: idx + len(S),
+        "S": lambda idx: idx + 1,
     }
 
     condition = conditions[machine_type]
@@ -55,7 +57,7 @@ def solve_test_case(input_test_case: List[str]) -> Tuple[FSM, int]:
     S, Q, R = map(tuple, [S, Q, R])
     fsm = FSM(S=S, R=R, Q=Q, init_state=init_state)
     end_test_case = 4 + len(Q)
-    transition_table = input_test_case[4: end_test_case]
+    transition_table = input_test_case[4:end_test_case]
     parse_transition_table(fsm, transition_table, machine_type)
     next_test_case_index = end_test_case
     return fsm, next_test_case_index
@@ -77,8 +79,8 @@ def solve(lines: List[str]) -> List[Tuple[FSM, FSM]]:
     return solutions
 
 
-if __name__ == '__main__':
-    with open("../test_input.txt", 'r') as f:
+if __name__ == "__main__":
+    with open("../test_input.txt", "r") as f:
         l = list(map(lambda s: s.strip(), f.readlines()))
     print(l)
     solve(l)
