@@ -1,0 +1,20 @@
+1
+baaba
+S
+S A B C
+a b
+S -> AB | BC
+A -> BA | a
+B -> CC | b
+C -> AB | a
+aaabbbcc
+S
+S A B C D E F
+a b c
+S -> AB
+A -> CD | CF
+B -> c | EB
+C -> a
+D -> b
+E -> c
+F -> AD
