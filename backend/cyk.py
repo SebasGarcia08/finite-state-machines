@@ -157,8 +157,16 @@ class Answer(NamedTuple):
     table: ProcessTable
 
 
-def cartesian_product():
-    pass
+def cartesian_product_productions(
+    string: InputString, i: int, j: int, table: ProcessTable
+) -> List[Production]:
+    """
+    i: index from which to start
+    j: index to move right
+    """
+    if j == 0:
+        return [string[i]]
+    return list()
 
 
 def solve(G: Grammar, string: InputString) -> Answer:
@@ -168,6 +176,10 @@ def solve(G: Grammar, string: InputString) -> Answer:
     for i in range(len(string)):
         ith_row: List[Set[Variable]] = [set() for _ in range(len(string) - i)]
         table.append(ith_row)
+
+    for j in range(len(string)):
+        for i in range(len(string) - i):
+            cartesian_product_productions(string, i, j, table)
 
     print(string)
     for i, s in enumerate(string):
