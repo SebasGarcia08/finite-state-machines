@@ -157,11 +157,12 @@ class Answer(NamedTuple):
     table: ProcessTable
 
 
-def get_possible_substrings(string: InputString) -> List[Production]:
+def get_possible_substrings(string: InputString) -> Iterator[Production]:
     productions: List[Production] = list()
     for i in range(len(string)):
-            productions.append(string[i : i + j])
+        productions.append(string[i : i + j])
     return productions
+
 
 def cartesian_product_productions(
     string: InputString, i: int, j: int, table: ProcessTable, G: Grammar
@@ -191,9 +192,35 @@ def solve(G: Grammar, string: InputString) -> Answer:
         ith_row: List[Set[Variable]] = [set() for _ in range(len(string) - i)]
         table.append(ith_row)
 
+    # Fill first row of table with variables that produce each terminal
+    for i in range(len(string)):
+        for s in string[i : i + 1]:
+            for variable, productions in G.productions.items():
+                for production in productions:
+                    if s == production:
+                        table[0][i].add(variable)
+
     for j in range(1, len(string) + 1):
         for i in range(len(string) - j + 1):
-            cartesian_products = cartesian_product_productions(string, i, j, table, G)
+            substring = string[i : i + j]
+            print(f"{i =}, {j = }, {substring}")
+            for k in range(1, j):
+                # left, right = string[i : i + k], string[i + k : i + j]
+                left, right = substring[:k], substring[k:]
+                left_prod = table[len(left) - 1][i]
+                right_prod = table[len(right) - 1][i + len(substring) - len(right)]
+                print(f"{k =}, \n{left}, \n{right}, \n{left_prod = } \n{right_prod = }")
+                for lp in left_prod:
+                    for rp in right_prod:
+                        cartesian_prod: Production = tuple([lp, rp])
+                        for variable, productions in G.productions.items():
+                            for production in productions:
+                                print(
+                                    f"{cartesian_prod} == {production}. {cartesian_prod == production}"
+                                )
+                                if cartesian_prod == production:
+                                    table[j - 1][i].add(variable)
+            print()
     print(table)
     ans = Answer(string, G, True, table)
     return ans
