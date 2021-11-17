@@ -157,15 +157,29 @@ class Answer(NamedTuple):
     table: ProcessTable
 
 
+def get_possible_substrings(string: InputString) -> List[Production]:
+    productions: List[Production] = list()
+    for i in range(len(string)):
+            productions.append(string[i : i + j])
+    return productions
+
 def cartesian_product_productions(
-    string: InputString, i: int, j: int, table: ProcessTable
+    string: InputString, i: int, j: int, table: ProcessTable, G: Grammar
 ) -> List[Production]:
     """
     i: index from which to start
     j: index to move right
     """
-    if j == 0:
-        return [string[i]]
+    print(f"{i=} {j=}", end=" ")
+    substring = string[i : i + j]
+    print(f"{substring}")
+    if j == 1:
+        for s in substring:
+            for variable, productions in G.productions.items():
+                for production in productions:
+                    if s == production:
+                        print(f"{s} == {production}")
+                        table[j - 1][i].add(variable)
     return list()
 
 
@@ -177,17 +191,10 @@ def solve(G: Grammar, string: InputString) -> Answer:
         ith_row: List[Set[Variable]] = [set() for _ in range(len(string) - i)]
         table.append(ith_row)
 
-    for j in range(len(string)):
-        for i in range(len(string) - i):
-            cartesian_product_productions(string, i, j, table)
-
-    print(string)
-    for i, s in enumerate(string):
-        for variable, productions in G.productions.items():
-            for production in productions:
-                if s == production:
-                    table[0][i].add(variable)
-
+    for j in range(1, len(string) + 1):
+        for i in range(len(string) - j + 1):
+            cartesian_products = cartesian_product_productions(string, i, j, table, G)
+    print(table)
     ans = Answer(string, G, True, table)
     return ans
 
