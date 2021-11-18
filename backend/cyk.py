@@ -12,6 +12,7 @@ logging.basicConfig(
 )
 
 logger = logging.getLogger(__name__)
+EMPTY_SET: Set[Any] = set()
 
 
 class ParsingError(Exception):
@@ -155,36 +156,10 @@ class Answer(NamedTuple):
     grammar: Grammar
     result: bool
     table: ProcessTable
+    explanation: str
 
 
-def get_possible_substrings(string: InputString) -> Iterator[Production]:
-    productions: List[Production] = list()
-    for i in range(len(string)):
-        productions.append(string[i : i + j])
-    return productions
-
-
-def cartesian_product_productions(
-    string: InputString, i: int, j: int, table: ProcessTable, G: Grammar
-) -> List[Production]:
-    """
-    i: index from which to start
-    j: index to move right
-    """
-    print(f"{i=} {j=}", end=" ")
-    substring = string[i : i + j]
-    print(f"{substring}")
-    if j == 1:
-        for s in substring:
-            for variable, productions in G.productions.items():
-                for production in productions:
-                    if s == production:
-                        print(f"{s} == {production}")
-                        table[j - 1][i].add(variable)
-    return list()
-
-
-def solve(G: Grammar, string: InputString) -> Answer:
+def initialize_table(string: InputString, G: Grammar) -> ProcessTable:
     table: ProcessTable = list()
 
     # Initialize table
@@ -199,30 +174,55 @@ def solve(G: Grammar, string: InputString) -> Answer:
                 for production in productions:
                     if s == production:
                         table[0][i].add(variable)
+    return table
 
-    for j in range(1, len(string) + 1):
+
+def cartesian_product_productions(
+    left_prod: Set[Variable], right_prod: Set[Variable]
+) -> Iterator[Production]:
+    for l in left_prod:
+        for r in right_prod:
+            yield (
+                l,
+                r,
+            )
+
+
+def prod2str(p: List[Production]) -> str:
+    return "".join(str(x[0]) for x in p)
+
+
+def solve(G: Grammar, string: InputString) -> Answer:
+    table = initialize_table(string, G)
+    explanation = ""
+
+    # Fill the rest of the table, start from 2 because we already filled the first row
+    for j in range(2, len(string) + 1):
         for i in range(len(string) - j + 1):
             substring = string[i : i + j]
-            print(f"{i =}, {j = }, {substring}")
+            explanation += f"i = {i}, j = {j}, {prod2str(substring)}\n"
             for k in range(1, j):
-                # left, right = string[i : i + k], string[i + k : i + j]
                 left, right = substring[:k], substring[k:]
                 left_prod = table[len(left) - 1][i]
                 right_prod = table[len(right) - 1][i + len(substring) - len(right)]
-                print(f"{k =}, \n{left}, \n{right}, \n{left_prod = } \n{right_prod = }")
-                for lp in left_prod:
-                    for rp in right_prod:
-                        cartesian_prod: Production = tuple([lp, rp])
-                        for variable, productions in G.productions.items():
-                            for production in productions:
-                                print(
-                                    f"{cartesian_prod} == {production}. {cartesian_prod == production}"
-                                )
-                                if cartesian_prod == production:
-                                    table[j - 1][i].add(variable)
-            print()
-    print(table)
-    ans = Answer(string, G, True, table)
+                explanation += f"\tk = {k}, \n\t{prod2str(left)}: {left_prod}, \n\t{prod2str(right)}: {right_prod}\n"
+
+                if left_prod == EMPTY_SET or right_prod == EMPTY_SET:
+                    explanation += f"\tSkipping since none produces left or right\n"
+                    explanation += "\n"
+                    continue
+
+                cartesian_product = cartesian_product_productions(left_prod, right_prod)
+                for candidate_production in cartesian_product:
+                    for variable, productions in G.productions.items():
+                        for production in productions:
+                            if candidate_production == production:
+                                explanation += f"\tAdding {variable} because produces {''.join(str(s) for s in candidate_production)}\n"
+                                table[j - 1][i].add(variable)
+                explanation += "\n"
+        explanation += "\n"
+    result = G.start in table[-1][0]
+    ans = Answer(string, G, result, table, explanation)
     return ans
 
 
@@ -280,28 +280,25 @@ def parse_input(lines: List[str], n: int) -> Iterator[Tuple[Grammar, InputString
         yield G, string
 
 
-def main(args: Dict[str, Any]):
+def main(args: Dict[str, Any]) -> List[Answer]:
     with open(args["input_file"], "r") as f:
         lines = f.read().split("\n")
     n = int(lines[0])
     lines = list(map(del_extra_spaces, lines[1:]))
+    answers: List[Answer] = list()
     for G, string in parse_input(lines, n):
-        print(string)
         ans = solve(G, string)
-        print(G)
-        print(string)
+        answers.append(ans)
+        print(ans.explanation)
         for r in ans.table:
             print(r)
+    return answers
 
 
 if __name__ == "__main__":
     parser = ArgumentParser()
     parser.add_argument(
-        "-i",
-        "--input-file",
-        help="input file name",
-        type=str,
-        default="cyk_input.txt",
+        "-i", "--input-file", help="input file name", type=str, default="cyk_input.txt",
     )
     parser.add_argument(
         "-o" "--output-file",
