@@ -14,14 +14,9 @@ export default new Router({
       component: CYK
     },
     {
-      path: '/fsm',
+      path: '/',
       name: 'FSM',
       component: FSM
-    },
-    {
-      path: '/',
-      name: 'Home',
-      component: Home
     }
   ],
   mode: 'history'

@@ -72,7 +72,6 @@ export default {
   created() {},
   data() {
     return {
-      message: "New message from Vue",
       solution: "",
       input:
         "5\n" +
