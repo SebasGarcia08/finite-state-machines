@@ -15,7 +15,7 @@
           </p>
           <nav class="mb-3">
             <b-nav vertical>
-              <b-nav-item active href="/fsm" @click="hide"
+              <b-nav-item active href="/" @click="hide"
                 >Finite State Machine partitoning</b-nav-item
               >
               <b-nav-item href="/cyk" @click="hide">CYK</b-nav-item>

@@ -1,8 +1,10 @@
 <template>
   <div>
     <b-navbar toggleable="lg" type="dark" variant="info">
-      <Sidebar />
-      <b-navbar-brand class="mb-0"> Automata converter</b-navbar-brand>
+      <div class="container">
+        <b-navbar-brand class="mb-1"> Automatron </b-navbar-brand>
+        <Sidebar />
+      </div>
     </b-navbar>
   </div>
 </template>
