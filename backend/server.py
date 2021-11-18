@@ -43,11 +43,11 @@ def cyk_solve() -> Response:
                 ans = solve_cyk(G, string)
                 solutions_str += f"TEST CASE {i}\n"
                 solutions_str += f"Answer: {ans.result}\n"
-                solutions_str += "Table: \n"
                 solutions_str += f"Input string: \n{ans.string}\n"
+                solutions_str += "Table: \n"
                 for r in ans.table:
                     solutions_str += str(r) + "\n"
-                solutions_str += "# Detailed explanation\n"
+                solutions_str += "Detailed explanation\n"
                 solutions_str += ans.explanation
                 solutions_str += "#" * 100 + "\n"
             return jsonify(solutions_str)
