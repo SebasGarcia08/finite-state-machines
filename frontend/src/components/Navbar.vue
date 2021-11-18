@@ -1,12 +1,15 @@
 <template>
   <div>
     <b-navbar toggleable="lg" type="dark" variant="info">
-      <b-navbar-brand class="mb-0">Automata converter</b-navbar-brand>
+      <Sidebar />
+      <b-navbar-brand class="mb-0"> Automata converter</b-navbar-brand>
     </b-navbar>
   </div>
 </template>
 <script>
+import Sidebar from "./Sidebar";
 export default {
-  name: 'Navbar'
-}
+  components: { Sidebar },
+  name: "Navbar"
+};
 </script>
